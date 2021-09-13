@@ -18,7 +18,19 @@ yarn install
 ### Fire it up
 
 ```terminal
-yarn redwood dev
+yarn rw dev
 ```
 
 Your browser should open automatically to `http://localhost:8910` to see the web app. Lambda functions run on `http://localhost:8911` and are also proxied to `http://localhost:8910/.redwood/functions/*`.
+
+### Changes on database
+1. Modify `schema.prisma` file (tables on the DB)
+2. Create migration with
+```terminal
+yarn rw prisma migrate dev
+```
+3. If a new table was created in the database (for example, Post table) and you want to create all the CRUD operation pages, do
+```terminal
+yarn rw g scaffold post
+```
+> **[What happens under the hood?](https://learn.redwoodjs.com/docs/tutorial/getting-dynamic#creating-a-post-editor)**
