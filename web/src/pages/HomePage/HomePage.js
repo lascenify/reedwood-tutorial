@@ -1,10 +1,8 @@
-import { Link, routes } from '@redwoodjs/router'
+import PostsCell from 'src/components/PostsCell'
 
 const HomePage = () => {
   return (
-    <>
-      <main>Home</main>
-    </>
+    <PostsCell/>
   )
 }
 
