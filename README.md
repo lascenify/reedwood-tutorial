@@ -33,4 +33,4 @@ yarn rw prisma migrate dev
 ```terminal
 yarn rw g scaffold post
 ```
-
+> **[What happens under the hood?](https://learn.redwoodjs.com/docs/tutorial/getting-dynamic#creating-a-post-editor)** 
