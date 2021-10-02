@@ -6,23 +6,44 @@ import {
   TextAreaField,
   FieldError,
   Label,
+  FormError,
 } from '@redwoodjs/forms'
+import { useMutation } from '@redwoodjs/web'
+import { toast, Toaster } from '@redwoodjs/web/toast'
+import { useForm } from 'react-hook-form'
+
+const CREATE_CONTACT = gql`
+  mutation CreateContactMutation($input: CreateContactInput!) {
+    createContact(input: $input) {
+      id
+    }
+  }
+`
 
 const ContactPage = () => {
+  const formMethods = useForm({ mode: 'onBlur' })
+
+  const [create, { loading, error }] = useMutation(CREATE_CONTACT, {
+    onCompleted: () => {
+      toast.success('Thank you for your submission!')
+      formMethods.reset()
+    },
+  })
+
   const onSubmit = (data) => {
+    create({ variables: { input: data } })
     console.log(data)
   }
 
   return (
     <>
-      <MetaTags
-        title="Contact"
-        // description="Contact description"
-        /* you should un-comment description and add a unique description, 155 characters or less
-      You can look at this documentation for best practices : https://developers.google.com/search/docs/advanced/appearance/good-titles-snippets */
-      />
-
-      <Form onSubmit={onSubmit} validation={{ mode: 'onBlur' }}>
+      <MetaTags title="Contact" />
+      <Toaster />
+      <Form onSubmit={onSubmit} error={error} formMethods={formMethods}>
+        <FormError
+          error={error}
+          wrapperStyle={{ color: 'red', backgroundColor: 'lavenderblush' }}
+        />
         <Label name="name" errorClassName="error">
           Name
         </Label>
@@ -41,6 +62,7 @@ const ContactPage = () => {
             required: true,
             pattern: {
               value: /[^@]+@[^.]+\..+/,
+              message: 'Please enter a valid email address',
             },
           }}
           errorClassName="error"
@@ -56,7 +78,7 @@ const ContactPage = () => {
         />
 
         <FieldError name="message" className="error" />
-        <Submit>Save</Submit>
+        <Submit disabled={loading}>Save</Submit>
       </Form>
     </>
   )
